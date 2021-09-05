@@ -1,7 +1,7 @@
 package com.ly.recommend_backend.controller;
 
-import com.ly.recommend_backend.entity.User;
-import com.ly.recommend_backend.service.UserService;
+import com.ly.recommend_backend.entity.UserP;
+import com.ly.recommend_backend.service.UserServiceP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserServiceP userService;
 
     @RequestMapping(value = "/login", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
     public ModelMap login(@RequestParam("username") String username, @RequestParam("password") String password) {
         ModelMap model = new ModelMap();
         // 查询用户数据
-        User user = new User(username, password);
+        UserP user = new UserP(username, password);
         ModelMap query = userService.login(user);
         if((boolean) query.get("result")) {
             model.addAttribute("success", true);
@@ -35,15 +35,15 @@ public class UserController {
     public ModelMap register(@RequestParam("username") String username, @RequestParam("password") String password) {
         ModelMap model = new ModelMap();
         // 查询用户数据
-        User user = new User(username, password);
-        User user2 = userService.findByName(username);
+        UserP user = new UserP(username, password);
+        UserP user2 = userService.findByName(username);
         if(user2 != null) {
             model.addAttribute("success", false);
             model.addAttribute("msg", "用户已存在");
         } else {
             model.addAttribute("success", true);
             user.setTimestamp(System.currentTimeMillis());
-            User res = userService.add(user);
+            UserP res = userService.add(user);
             model.addAttribute("user", res);
             model.addAttribute("msg", "注册成功");
         }

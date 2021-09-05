@@ -85,12 +85,13 @@ public class HbaseTableSource extends TableInputFormat<Tuple4<String, String, Do
     }
     private HTable createTable() throws IOException {
         LOG.info("Initializing HBaseConfiguration");
+        System.setProperty("hadoop.home.dir","E:\\hadoop-2.7.3" );
         org.apache.hadoop.conf.Configuration conf = HBaseConfiguration.create();
-        conf.set("hbase.rootdir", Property.getStrValue("hbase.rootdir"));
-        conf.set("hbase.zookeeper.quorum", Property.getStrValue("hbase.zookeeper.quorum"));
-        conf.set("hbase.client.scanner.timeout.period", Property.getStrValue("hbase.client.scanner.timeout.period"));
-        conf.set("hbase.rpc.timeout", Property.getStrValue("hbase.rpc.timeout"));
-        System.out.println(Property.getStrValue("hbase.rootdir"));
+        // conf.set("hbase.rootdir", Property.getStrValue("hbase.rootdir"));
+        // conf.set("hbase.zookeeper.quorum", Property.getStrValue("hbase.zookeeper.quorum"));
+        // conf.set("hbase.client.scanner.timeout.period", Property.getStrValue("hbase.client.scanner.timeout.period"));
+        // conf.set("hbase.rpc.timeout", Property.getStrValue("hbase.rpc.timeout"));
+        // System.out.println(Property.getStrValue("hbase.rootdir"));
         conn = ConnectionFactory.createConnection(conf);
         return new HTable(conf, this.getTableName());
     }

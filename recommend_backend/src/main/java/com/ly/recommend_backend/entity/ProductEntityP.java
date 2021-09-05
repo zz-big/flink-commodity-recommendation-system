@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="product")
-public class ProductEntity {
+public class ProductEntityP {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -26,10 +26,10 @@ public class ProductEntity {
 
     private double score;
 
-    public ProductEntity() {
+    public ProductEntityP() {
     }
 
-    public ProductEntity(int productId, String name, String imageUrl, String categories, String tags) {
+    public ProductEntityP(int productId, String name, String imageUrl, String categories, String tags) {
         this.productId = productId;
         this.name = name;
         this.imageUrl = imageUrl;

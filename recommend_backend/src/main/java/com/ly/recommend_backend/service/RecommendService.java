@@ -3,7 +3,7 @@ package com.ly.recommend_backend.service;
 
 import com.ly.recommend_backend.dao.ProductInterface;
 import com.ly.recommend_backend.util.HbaseClient;
-import com.ly.recommend_backend.entity.ProductEntity;
+import com.ly.recommend_backend.entity.ProductEntityP;
 import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +18,8 @@ public class RecommendService {
     private Logger logger = LoggerFactory.getLogger(RecommendService.class);
 
 
-    public List<ProductEntity> getHistoryHotOrGoodProducts(int num, String tableName) throws IOException {
-        List<ProductEntity> recommendEntityList = new ArrayList<>(num);
+    public List<ProductEntityP> getHistoryHotOrGoodProducts(int num, String tableName) throws IOException {
+        List<ProductEntityP> recommendEntityList = new ArrayList<>(num);
         // 查出所有热门商品 list
         List<String> allProductsId = HbaseClient.getAllKey(tableName);
         List<Pair<String, Double>> list = new ArrayList<>();
@@ -39,7 +39,7 @@ public class RecommendService {
         });
 
         for(int i = 1; i <= num; i++) {
-            ProductEntity product = getProductEntity(Integer.parseInt(list.get(i).getKey()));
+            ProductEntityP product = getProductEntity(Integer.parseInt(list.get(i).getKey()));
             product.setScore(3.5);
             System.out.println(product);
             recommendEntityList.add(product);
@@ -50,36 +50,36 @@ public class RecommendService {
     @Autowired
     private ProductInterface productInterface;
 
-    public ProductEntity getProductEntity(int productId) {
-        ProductEntity productEntity = productInterface.getProductByProductId(productId);
+    public ProductEntityP getProductEntity(int productId) {
+        ProductEntityP productEntity = productInterface.getProductByProductId(productId);
         System.out.println(productEntity);
         return productEntity;
     }
 
-    public List<ProductEntity> getItemCFProducts(int productId, String tableName) throws IOException {
+    public List<ProductEntityP> getItemCFProducts(int productId, String tableName) throws IOException {
         // 查询 hbase 获取 itemCFRecommend 表对应内容
-        List<ProductEntity> result = new ArrayList<>();
+        List<ProductEntityP> result = new ArrayList<>();
         List<Map.Entry> allProducts = HbaseClient.getRow(tableName, String.valueOf(productId));
         for(Map.Entry entry : allProducts) {
             String id = (String) entry.getKey();
             double sim = (double) entry.getValue();
-            ProductEntity product = getProductEntity(Integer.parseInt(id));
+            ProductEntityP product = getProductEntity(Integer.parseInt(id));
             product.setScore(sim);
             result.add(product);
         }
         return result;
     }
 
-    public List<ProductEntity> getProductBySql(String sql) {
+    public List<ProductEntityP> getProductBySql(String sql) {
         return productInterface.findByNameLike(sql);
     }
 
-    public List<ProductEntity> getOnlineRecs(String userId, String tableName) throws IOException {
+    public List<ProductEntityP> getOnlineRecs(String userId, String tableName) throws IOException {
         List<Map.Entry> allProducts = HbaseClient.getRow(tableName, userId);
-        List<ProductEntity> res = new ArrayList<>(allProducts.size());
+        List<ProductEntityP> res = new ArrayList<>(allProducts.size());
         for (Map.Entry entry : allProducts) {
             String productId = (String) entry.getKey();
-            ProductEntity productEntity = productInterface.getProductByProductId(Integer.parseInt(productId));
+            ProductEntityP productEntity = productInterface.getProductByProductId(Integer.parseInt(productId));
             productEntity.setScore(3.5);
             System.out.println("onlineRecs: " + productEntity);
             res.add(productEntity);
@@ -87,7 +87,7 @@ public class RecommendService {
         return res;
     }
 
-    public List<ProductEntity> getOnlineHot(String tableName, int nums){
+    public List<ProductEntityP> getOnlineHot(String tableName, int nums){
         List<String> allKeys = null;
         try {
              allKeys = HbaseClient.getAllKey(tableName);
@@ -95,7 +95,7 @@ public class RecommendService {
             e.printStackTrace();
         }
         System.out.println(allKeys);
-        List<ProductEntity> res = new ArrayList<>(nums);
+        List<ProductEntityP> res = new ArrayList<>(nums);
         try {
             for(int i = 0; i < nums && i < allKeys.size(); i++) {
                 List<Map.Entry> row = HbaseClient.getRow(tableName, String.valueOf(i));
@@ -109,7 +109,7 @@ public class RecommendService {
                         count = (Double) entry.getValue();
                     }
                 }
-                ProductEntity productEntity = productInterface.getProductByProductId((int)(double)productId);
+                ProductEntityP productEntity = productInterface.getProductByProductId((int)(double)productId);
                 productEntity.setScore(i+1);
                 res.add(productEntity);
             }

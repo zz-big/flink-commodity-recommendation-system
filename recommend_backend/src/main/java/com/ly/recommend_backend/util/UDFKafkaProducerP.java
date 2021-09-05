@@ -8,7 +8,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import java.util.Properties;
 
 
-public class UDFKafkaProducer {
+public class UDFKafkaProducerP {
 
     /**
      * Kafka 生产者

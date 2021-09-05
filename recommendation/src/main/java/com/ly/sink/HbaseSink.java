@@ -41,11 +41,12 @@ public class HbaseSink implements OutputFormat<Object> {
     @Override
     public void open(int i, int i1) throws IOException {
         org.apache.hadoop.conf.Configuration conf = HBaseConfiguration.create();
-        conf.set("hbase.rootdir", Property.getStrValue("hbase.rootdir"));
-        conf.set("hbase.zookeeper.quorum", Property.getStrValue("hbase.zookeeper.quorum"));
-        conf.set("hbase.client.scanner.timeout.period", Property.getStrValue("hbase.client.scanner.timeout.period"));
-        conf.set("hbase.rpc.timeout", Property.getStrValue("hbase.rpc.timeout"));
-        System.out.println(Property.getStrValue("hbase.rootdir"));
+        System.setProperty("hadoop.home.dir","E:\\hadoop-2.7.3" );
+        // conf.set("hbase.rootdir", Property.getStrValue("hbase.rootdir"));
+        // conf.set("hbase.zookeeper.quorum", Property.getStrValue("hbase.zookeeper.quorum"));
+        // conf.set("hbase.client.scanner.timeout.period", Property.getStrValue("hbase.client.scanner.timeout.period"));
+        // conf.set("hbase.rpc.timeout", Property.getStrValue("hbase.rpc.timeout"));
+        // System.out.println(Property.getStrValue("hbase.rootdir"));
         this.conn = ConnectionFactory.createConnection(conf);
         this.table =  new HTable(conf, this.tableName);
     }

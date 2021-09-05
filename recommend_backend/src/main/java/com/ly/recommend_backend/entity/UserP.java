@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "user")
-public class User {
+public class UserP {
     private static final long serialVersionUID = 2L;
 
     @Id
@@ -18,10 +18,10 @@ public class User {
     @Column(name = "timestamp")
     private long timestamp;
 
-    public User() {
+    public UserP() {
     }
 
-    public User(String name, String password) {
+    public UserP(String name, String password) {
         this.name = name;
         this.password = password;
     }

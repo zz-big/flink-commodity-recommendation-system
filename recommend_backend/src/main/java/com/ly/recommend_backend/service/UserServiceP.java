@@ -2,7 +2,7 @@ package com.ly.recommend_backend.service;
 
 
 import com.ly.recommend_backend.dao.UserInterface;
-import com.ly.recommend_backend.entity.User;
+import com.ly.recommend_backend.entity.UserP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,22 +10,22 @@ import org.springframework.ui.ModelMap;
 import javax.annotation.Resource;
 
 @Service
-public class UserService {
+public class UserServiceP {
 
     @Autowired
     private UserInterface userInterface;
     @Resource
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public User add(User user) {
+    public UserP add(UserP user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        User user1 = userInterface.save(user);
+        UserP user1 = userInterface.save(user);
         return user1;
     }
 
-    public ModelMap login(User user) {
+    public ModelMap login(UserP user) {
         ModelMap modelMap = new ModelMap();
-        User user2 = userInterface.getUserByName(user.getName());
+        UserP user2 = userInterface.getUserByName(user.getName());
         if(user2 == null) {
             modelMap.addAttribute("result", false);
             modelMap.addAttribute("msg", "用户不存在");
@@ -41,8 +41,8 @@ public class UserService {
         return modelMap;
     }
 
-    public User findByName(String name) {
-        User user2 = userInterface.getUserByName(name);
+    public UserP findByName(String name) {
+        UserP user2 = userInterface.getUserByName(name);
         if(user2 == null) {
             return null;
         }

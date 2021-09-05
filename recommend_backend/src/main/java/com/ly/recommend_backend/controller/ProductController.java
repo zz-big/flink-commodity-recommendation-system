@@ -1,11 +1,9 @@
 package com.ly.recommend_backend.controller;
 
 
-import com.ly.recommend_backend.entity.ProductEntity;
-import com.ly.recommend_backend.entity.User;
+import com.ly.recommend_backend.entity.ProductEntityP;
 import com.ly.recommend_backend.service.RecommendService;
-import com.ly.recommend_backend.service.UserService;
-import com.ly.recommend_backend.util.UDFKafkaProducer;
+import com.ly.recommend_backend.util.UDFKafkaProducerP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +36,7 @@ public class ProductController {
     @ResponseBody
     public ModelMap getHistoryHotProducts(@RequestParam("num") int num) {
         ModelMap model = new ModelMap();
-        List<ProductEntity> recommendations = null;
+        List<ProductEntityP> recommendations = null;
         try {
             recommendations = recommendService.getHistoryHotOrGoodProducts(num, HISTORY_HOT_PRODCUTS);
             model.addAttribute("success", true);
@@ -49,7 +47,7 @@ public class ProductController {
         }
         StringBuilder sb = new StringBuilder();
         if(recommendations != null) {
-            for(ProductEntity product : recommendations) sb.append(product).append(" ");
+            for(ProductEntityP product : recommendations) sb.append(product).append(" ");
         } else {
             sb.append("数据为空");
         }
@@ -64,7 +62,7 @@ public class ProductController {
     @ResponseBody
     public ModelMap getGoodProducts(@RequestParam("num") int num) {
         ModelMap model = new ModelMap();
-        List<ProductEntity> recommendations = null;
+        List<ProductEntityP> recommendations = null;
         try {
             recommendations = recommendService.getHistoryHotOrGoodProducts(num, GOOD_PRODUCTS);
             model.addAttribute("success", true);
@@ -75,7 +73,7 @@ public class ProductController {
         }
         StringBuilder sb = new StringBuilder();
         if(recommendations != null) {
-            for(ProductEntity product : recommendations) sb.append(product).append("\t");
+            for(ProductEntityP product : recommendations) sb.append(product).append("\t");
         } else {
             sb.append("数据为空");
         }
@@ -91,7 +89,7 @@ public class ProductController {
     @ResponseBody
     public ModelMap getItemCFProducts(@PathVariable("productId") int productId) {
         ModelMap model = new ModelMap();
-        List<ProductEntity> recommendatitons = null;
+        List<ProductEntityP> recommendatitons = null;
         try {
             recommendatitons = recommendService.getItemCFProducts(productId, ITEM_CF_RECOMMEND);
             model.addAttribute("success", true);
@@ -152,7 +150,7 @@ public class ProductController {
         try {
             System.out.print("=========埋点=========");
             String msg = userId + "," + productId + "," + score + "," + System.currentTimeMillis() / 1000;
-            UDFKafkaProducer.produce(msg);
+            UDFKafkaProducerP.produce(msg);
             System.out.println(msg);
             model.addAttribute("success", true);
             model.addAttribute("message", "完成评分");
@@ -177,7 +175,7 @@ public class ProductController {
     public ModelMap onlineRecs(@RequestParam("userId") String userId) {
         ModelMap model = new ModelMap();
         try {
-            List<ProductEntity> res = recommendService.getOnlineRecs(userId, ONLINE_RECOMMEND);
+            List<ProductEntityP> res = recommendService.getOnlineRecs(userId, ONLINE_RECOMMEND);
             model.addAttribute("success", true);
             model.addAttribute("products", res);
         } catch (Exception e) {
@@ -195,7 +193,7 @@ public class ProductController {
     public ModelMap onlineHot() {
         ModelMap model = new ModelMap();
         try {
-            List<ProductEntity> res = recommendService.getOnlineHot(ONLINE_HOT, ONLINE_HOT_NUMS);
+            List<ProductEntityP> res = recommendService.getOnlineHot(ONLINE_HOT, ONLINE_HOT_NUMS);
             model.addAttribute("success", true);
             model.addAttribute("products", res);
         } catch (Exception e) {

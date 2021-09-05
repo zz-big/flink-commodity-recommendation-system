@@ -10,14 +10,14 @@ public class DataToHbaseMapFunction implements MapFunction<RatingEntity, RatingE
             String rowkey =ratingEntity.getProductId() + "_" + ratingEntity.getUserId() + "_" + ratingEntity.getTimestamp();
             System.out.println(rowkey);
             // record user rate info
-            HbaseClient.putData("rating", rowkey, "log", "productId", String.valueOf(ratingEntity.getProductId()));
-            HbaseClient.putData("rating", rowkey, "log", "userId", String.valueOf(ratingEntity.getUserId()));
-            HbaseClient.putData("rating", rowkey, "log", "score", String.valueOf(ratingEntity.getScore()));
-            HbaseClient.putData("rating", rowkey, "log", "timestamp", String.valueOf(ratingEntity.getTimestamp()));
+            HbaseClient.putData("default:rating", rowkey, "log", "productId", String.valueOf(ratingEntity.getProductId()));
+            HbaseClient.putData("default:rating", rowkey, "log", "userId", String.valueOf(ratingEntity.getUserId()));
+            HbaseClient.putData("default:rating", rowkey, "log", "score", String.valueOf(ratingEntity.getScore()));
+            HbaseClient.putData("default:rating", rowkey, "log", "timestamp", String.valueOf(ratingEntity.getTimestamp()));
             // record user-product info
-            HbaseClient.increamColumn("userProduct", String.valueOf(ratingEntity.getUserId()), "product", String.valueOf(ratingEntity.getProductId()));
+            HbaseClient.increamColumn("default:userProduct", String.valueOf(ratingEntity.getUserId()), "product", String.valueOf(ratingEntity.getProductId()));
             // record product-user info
-            HbaseClient.increamColumn("productUser", String.valueOf(ratingEntity.getProductId()), "user", String.valueOf(ratingEntity.getUserId()));
+            HbaseClient.increamColumn("default:productUser", String.valueOf(ratingEntity.getProductId()), "user", String.valueOf(ratingEntity.getUserId()));
         }
         return ratingEntity;
     }

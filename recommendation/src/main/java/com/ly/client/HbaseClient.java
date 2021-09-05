@@ -16,11 +16,12 @@ public class HbaseClient {
 
     static {
         Configuration conf = HBaseConfiguration.create();
-        conf.set("hbase.rootdir", Property.getStrValue("hbase.rootdir"));
-        conf.set("hbase.zookeeper.quorum", Property.getStrValue("hbase.zookeeper.quorum"));
-        conf.set("hbase.client.scanner.timeout.period", Property.getStrValue("hbase.client.scanner.timeout.period"));
-        conf.set("hbase.rpc.timeout", Property.getStrValue("hbase.rpc.timeout"));
-        System.out.println(Property.getStrValue("hbase.rootdir"));
+        System.setProperty("hadoop.home.dir","E:\\hadoop-2.7.3" );
+        // conf.set("hbase.rootdir", Property.getStrValue("hbase.rootdir"));
+        // conf.set("hbase.zookeeper.quorum", Property.getStrValue("hbase.zookeeper.quorum"));
+        // conf.set("hbase.client.scanner.timeout.period", Property.getStrValue("hbase.client.scanner.timeout.period"));
+        // conf.set("hbase.rpc.timeout", Property.getStrValue("hbase.rpc.timeout"));
+        // System.out.println(Property.getStrValue("hbase.rootdir"));
         try {
             conn = ConnectionFactory.createConnection(conf);
             admin = conn.getAdmin();
